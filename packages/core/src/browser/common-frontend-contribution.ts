@@ -149,20 +149,20 @@ export namespace CommonCommands {
         category: VIEW_CATEGORY,
         label: 'Close All Tabs'
     };
-    export const CLOSE_EDITOR: Command = {
-        id: 'core.close.editor',
+    export const CLOSE_MAIN_TAB: Command = {
+        id: 'core.close.main.tab',
         category: VIEW_CATEGORY,
-        label: 'Close Editor'
+        label: 'Close Tab in Main Area'
     };
-    export const CLOSE_OTHER_EDITORS: Command = {
-        id: 'core.close.other.editors',
+    export const CLOSE_OTHER_MAIN_TABS: Command = {
+        id: 'core.close.other.main.tabs',
         category: VIEW_CATEGORY,
-        label: 'Close Other Editors'
+        label: 'Close Other Tabs in Main Area'
     };
-    export const CLOSE_ALL_EDITORS: Command = {
-        id: 'core.close.all.editors',
+    export const CLOSE_ALL_MAIN_TABS: Command = {
+        id: 'core.close.all.main.tabs',
         category: VIEW_CATEGORY,
-        label: 'Close All Editors'
+        label: 'Close All Tabs in Main Area'
     };
     export const COLLAPSE_PANEL: Command = {
         id: 'core.collapse.tab',
@@ -384,7 +384,8 @@ export class CommonFrontendContribution implements FrontendApplicationContributi
         });
 
         registry.registerMenuAction(CommonMenus.FILE_CLOSE, {
-            commandId: CommonCommands.CLOSE_EDITOR.id
+            commandId: CommonCommands.CLOSE_MAIN_TAB.id,
+            label: 'Close Editor'
         });
 
         registry.registerSubmenu(CommonMenus.FILE_SETTINGS_SUBMENU, 'Settings');
@@ -562,11 +563,11 @@ export class CommonFrontendContribution implements FrontendApplicationContributi
             isEnabled: (event?: Event) => this.findTabBar(event) !== undefined,
             execute: (event?: Event) => this.shell.closeTabs(this.findTabArea(event)!)
         });
-        commandRegistry.registerCommand(CommonCommands.CLOSE_EDITOR, {
+        commandRegistry.registerCommand(CommonCommands.CLOSE_MAIN_TAB, {
             isEnabled: () => this.shell.getCurrentWidget('main') !== undefined,
             execute: () => this.shell.getCurrentWidget('main')!.close()
         });
-        commandRegistry.registerCommand(CommonCommands.CLOSE_OTHER_EDITORS, {
+        commandRegistry.registerCommand(CommonCommands.CLOSE_OTHER_MAIN_TABS, {
             isEnabled: () => {
                 const tabBars = this.shell.mainAreaTabBars;
                 return tabBars.length > 1 || tabBars.length === 1 && tabBars[0].titles.length > 1;
@@ -578,7 +579,7 @@ export class CommonFrontendContribution implements FrontendApplicationContributi
                 }
             }
         });
-        commandRegistry.registerCommand(CommonCommands.CLOSE_ALL_EDITORS, {
+        commandRegistry.registerCommand(CommonCommands.CLOSE_ALL_MAIN_TABS, {
             isEnabled: () => this.shell.mainAreaTabBars.find(tb => tb.titles.length > 0) !== undefined,
             execute: () => this.shell.closeTabs('main')
         });
@@ -725,15 +726,15 @@ export class CommonFrontendContribution implements FrontendApplicationContributi
                 keybinding: 'ctrlcmd+alt+a'
             },
             {
-                command: CommonCommands.CLOSE_EDITOR.id,
+                command: CommonCommands.CLOSE_MAIN_TAB.id,
                 keybinding: this.isElectron() ? (isWindows ? 'ctrl+f4' : 'ctrlcmd+w') : 'alt+w'
             },
             {
-                command: CommonCommands.CLOSE_OTHER_EDITORS.id,
+                command: CommonCommands.CLOSE_OTHER_MAIN_TABS.id,
                 keybinding: 'ctrlcmd+alt+t'
             },
             {
-                command: CommonCommands.CLOSE_ALL_EDITORS.id,
+                command: CommonCommands.CLOSE_ALL_MAIN_TABS.id,
                 keybinding: this.isElectron() ? 'ctrlCmd+k ctrlCmd+w' : 'alt+shift+w'
             },
             // Panels
